@@ -10,6 +10,9 @@ namespace ADSPortEx2
 
     class Film : IComparable
     {
+        private string title;
+        private string director;
+        private int quantity;
         public Film()
         {
             throw new NotImplementedException();
@@ -17,30 +20,38 @@ namespace ADSPortEx2
 
         public Film(string title, string director, int quantity)
         {
-            throw new NotImplementedException();
+            this.title = title;
+            this.director = director;
+            this.quantity = quantity;
         }
 
         public string Title
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return title; }
+            set { title = value; }
         }
 
         public string Director
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return director; }
+            set { director = value; }
         }
 
         public int Quantity
         {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
+            get { return quantity; }
+            set { quantity = value; }
         }
 
         public int CompareTo(object obj)
         {
-            throw new NotImplementedException();
+            Film other = obj as Film;
+            return Title.CompareTo(other.Title);
+        }
+
+        public override string ToString()
+        {
+            return $"Title: {Title}, Director: {Director}, Quantity: {Quantity}";
         }
 
     }// End of class

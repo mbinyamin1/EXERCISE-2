@@ -23,30 +23,93 @@ namespace ADSPortEx2
 
         public BSTree()
         {
-            throw new NotImplementedException();
+            root = null;
         }
 
         //Functions for EX.2A
         public void InsertItem(T item)
         {
-            throw new NotImplementedException();
+            insertItem(item, ref root);
+        }
+
+        private void insertItem(T item, ref Node<T> tree)
+        {
+            if (tree == null)
+            {
+                tree = new Node<T>(item);
+            }
+            else if (item.CompareTo(tree.Data) < 0)
+            {
+                insertItem(item, ref tree.Left);
+            }
+            else if (item.CompareTo(tree.Data) > 0)
+            {
+                insertItem((T)item, ref tree.Right);
+            }
+            else
+            {
+                Console.WriteLine("\nFilm With This Title Already In Tree.");
+            }
         }
 
         public int Height()
         {
-            throw new NotImplementedException();
+            return height(root);
+        }
+
+        private int height(Node<T> tree)
+        {
+            if (tree == null)
+            {
+                return 0;
+            }
+            else
+            {
+                return 1 + Math.Max(height(tree.Left), height(tree.Right));
+            }
         }
 
         //Functions for EX.2B
 
         public int Count()
         {
-            throw new NotImplementedException();
+            return count(root);
         }
 
-        public void Update(T item)
+        private int count(Node<T> tree)
         {
-            throw new NotImplementedException();
+            if (tree == null)
+                return 0;
+            else
+                return 1 + count(tree.Left) + count(tree.Right);
+        }
+
+        public void Update(T item, T newItem)
+        {
+            updateItem(root, item, newItem);
+        }
+
+        private void updateItem(Node<T> tree, T item, T newItem)
+        {
+            if (tree == null)
+            {
+                Console.WriteLine("\nFilm With This Title Not Found.");
+                return;
+            }
+
+            if (item.CompareTo(tree.Data) == 0)
+            {
+                tree.Data = newItem;
+                Console.WriteLine("\nFilm Has Been Updated Successfully.");
+            }
+            else if (item.CompareTo(tree.Data) < 0)
+            {
+                updateItem(tree.Left, item, newItem);
+            }
+            else
+            {
+                updateItem(tree.Right, item, newItem);
+            }
         }
 
         //Free space, use as necessary to address task requirements... 

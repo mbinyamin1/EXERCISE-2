@@ -28,12 +28,123 @@ namespace ADSPortEx2
         //Functions for EX.2C
         public new void InsertItem(T item)
         {
-            throw new NotImplementedException();
+            root = InsertAndBalance(item, root);
+        }
+
+        private Node<T> InsertAndBalance(T item, Node<T> node)
+        {
+            if (node == null) return new Node<T>(item);
+
+            int compare = item.CompareTo(node.Data);
+
+            if (compare < 0)
+                node.Left = InsertAndBalance(item, node.Left);
+            else if (compare > 0)
+                node.Right = InsertAndBalance(item, node.Right);
+            else
+            {
+                Console.WriteLine("\nFilm With This Title Already In Tree.");
+            }
+            return Balance(node);
+        }
+
+        // Balancing logic
+        private Node<T> Balance(Node<T> node)
+        {
+            int balance = Height(node.Left) - Height(node.Right);
+
+            if (balance > 1)
+            {
+                if (Height(node.Left.Left) >= Height(node.Left.Right))
+                    node = RotateRight(node); // LL
+                else
+                    node = RotateLeftRight(node); // LR
+            }
+            else if (balance < -1)
+            {
+                if (Height(node.Right.Right) >= Height(node.Right.Left))
+                    node = RotateLeft(node); // RR
+                else
+                    node = RotateRightLeft(node); // RL
+            }
+
+            return node;
+        }
+
+        private Node<T> RotateRight(Node<T> y)
+        {
+            Node<T> x = y.Left;
+            y.Left = x.Right;
+            x.Right = y;
+            return x;
+        }
+
+        private Node<T> RotateLeft(Node<T> x)
+        {
+            Node<T> y = x.Right;
+            x.Right = y.Left;
+            y.Left = x;
+            return y;
+        }
+
+        private Node<T> RotateLeftRight(Node<T> node)
+        {
+            node.Left = RotateLeft(node.Left);
+            return RotateRight(node);
+        }
+
+        private Node<T> RotateRightLeft(Node<T> node)
+        {
+            node.Right = RotateRight(node.Right);
+            return RotateLeft(node);
+        }
+        private int Height(Node<T> node)
+        {
+            if (node == null) return 0;
+            return 1 + Math.Max(Height(node.Left), Height(node.Right));
         }
 
         public new void RemoveItem(T item)
         {
-            throw new NotImplementedException();
+            root = RemoveAndBalance(item, root);
+        }
+
+        private Node<T> RemoveAndBalance(T item, Node<T> node)
+        {
+            if (node == null) return null;
+
+            int compare = item.CompareTo(node.Data);
+
+            if (compare < 0)
+            {
+                node.Left = RemoveAndBalance(item, node.Left);
+            }
+            else if (compare > 0)
+            {
+                node.Right = RemoveAndBalance(item, node.Right);
+            }
+            else
+            {
+                if (node.Left == null)
+                    return node.Right;
+                else if (node.Right == null)
+                    return node.Left;
+                else
+                {
+                    Node<T> minNode = FindSmallest(node.Right);
+                    node.Data = minNode.Data;
+                    node.Right = RemoveAndBalance(minNode.Data, node.Right);
+                }
+            }
+
+            return Balance(node);
+        }
+
+        private Node<T> FindSmallest(Node<T> node)
+        {
+            while (node.Left != null)
+                node = node.Left;
+            return node;
         }
 
         //Free space, use as required
